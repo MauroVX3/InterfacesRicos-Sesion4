@@ -1,0 +1,18 @@
+body {
+    font-family: Verdana, sans-serif;
+    text-align: center;
+}
+
+input, select {
+    font-family: inherit;
+    font-weight: bold;
+    background-color: #faa14e;
+    border: black solid 2px;
+    border-radius: 5%;
+    padding: 0.2em;
+    margin: 0.15em 0.5em;
+}
+
+h1, h2 {
+    font-size: 2em;
+}
