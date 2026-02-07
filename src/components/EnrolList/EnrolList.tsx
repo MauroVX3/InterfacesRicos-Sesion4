@@ -22,6 +22,7 @@ for (let i = 1; i < 5; i++) {
 interface EnrolListProps {
     student?: Student;
     onStudentRemoved: (student: Student) => void;
+    onStudentEditing: (student: Student) => void; 
 }
 
 function EnrolList(props: EnrolListProps) {
@@ -55,20 +56,30 @@ function EnrolList(props: EnrolListProps) {
         setItems(items.filter(i => i.id !== item.id)); 
         props.onStudentRemoved(item);
     };
-    const handleEdit = (item: Student) => {};
+    const handleEdit = (item: Student) => {
+        props.onStudentEditing(item); 
+    };
 
-    useEffect(() => {
-        if (props.student) {
-            const currentID = props.student.id;
-            if (currentID == undefined) {
-                const student: Student = {
-                    ...props.student,
-                    id: uuidv4()
-                };
-                setItems([...items, student]);
-            }
-        }
-    }, [props.student])
+    useEffect(() => { 
+        if (props.student) {             
+            const currentID = props.student.id; 
+            if (currentID == undefined) { 
+                const student: Student = { ...props.student, id: uuidv4() }; 
+                setItems([...items, student]); 
+            } else { 
+                const studentIndex = items.findIndex(item => item.id === props.student!.id); 
+                if (studentIndex !== -1) { 
+                    const updatedItems = [...items]; 
+                    updatedItems[studentIndex] = { ...props.student }; // reemplazamos el estudiante 
+                    setItems(updatedItems); 
+                } else { 
+                    //TODO Ya lo gestionaremos mejor... 
+                    console.log("No encontramos el estudiante con ID " + studentIndex);  
+                } 
+            } 
+        }         
+    }, [props.student]);
+
 
     return (
         <div className="enrolList">

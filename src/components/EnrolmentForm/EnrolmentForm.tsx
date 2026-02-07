@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import './EnrolmentForm.css'
 import type { Student } from '../../entities/Student';
 
@@ -7,6 +7,7 @@ interface EnrolmentFormProps {
     currentEnrolments: number;
     onChangeEnrolments: (updateEnrolments: number) => void;
     onStudentChanged: (student: Student) => void;
+    editingStudent?: Student;
 }
 
 function EnrolmentForm(props: EnrolmentFormProps) {
@@ -16,20 +17,37 @@ function EnrolmentForm(props: EnrolmentFormProps) {
     const [lastName, setLastName] = useState("");
     const [welcomeMessage, setWelcomeMessage] = useState("");
 
+    const [btnTitle, setBtnTitle] = useState("Registar");
+    const [editingStudentID, setEditingStudentID] = useState<string>();
+
+    useEffect(() => {
+        if (props.editingStudent) {
+            setEditingStudentID(props.editingStudent.id);
+            setFirstName(props.editingStudent.firstName);
+            setLastName(props.editingStudent.lastName);
+            setBtnTitle("Actualizar");
+        }
+    }, [props.editingStudent]);
+
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        setWelcomeMessage(`Bienvenido/a ${firstName} ${lastName}`);
-        props.onChangeEnrolments(props.currentEnrolments + 1);
-
-        const student: Student = {
-            firstName: firstName,
-            lastName: lastName,
-            program: props.chosenProgram
-        };
-        props.onStudentChanged(student);
-
-        event.currentTarget.reset(); // vaciamos el formulario 
+        const submitter = (event.nativeEvent as SubmitEvent).submitter as HTMLInputElement;
+        if (!submitter || submitter.value != "Cancelar") {
+            setWelcomeMessage(`Bienvenido/a ${firstName} ${lastName}`);
+            props.onChangeEnrolments(props.currentEnrolments + 1);
+            const student: Student = {
+                id: editingStudentID,
+                firstName: firstName,
+                lastName: lastName,
+                program: props.chosenProgram
+            };
+            props.onStudentChanged(student);
+        }
+        setEditingStudentID(undefined);
+        setFirstName(""); // añadido porque hemos añadido value en el input 
+        setLastName("");
         nameInputRef.current?.focus(); // situamos el cursor en el campo fname 
         event.preventDefault();
+        setBtnTitle("Registrar");
     };
 
     return (
@@ -37,13 +55,13 @@ function EnrolmentForm(props: EnrolmentFormProps) {
             <form className="enrolForm" onSubmit={handleSubmit}>
                 <h1>Datos del estudiante - {props.chosenProgram}</h1>
                 <label>Nombre:</label>
-                <input type="text" name="fname" onBlur={(event) => setFirstName(event.target.value)} ref={nameInputRef} />
-                <br />
+                <input type="text" name="fname"
+                    onChange={(event) => setFirstName(event.target.value)} ref={nameInputRef} value={firstName} />
                 <label>Apellidos:</label>
-                <input type="text" name="lname" onBlur={(event) => setLastName(event.target.value)} />
-                <br />
-                <br />
-                <input type="submit" value="Registrar" />
+                <input type="text" name="lname"
+                    onChange={(event) => setLastName(event.target.value)} value={lastName} />
+                <input type="submit" value={btnTitle} />
+                <input type="submit" value="Cancelar" />
                 <label id="studentMsg" className="message">{welcomeMessage}</label>
             </form>
         </div>

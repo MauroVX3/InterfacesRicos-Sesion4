@@ -3,16 +3,52 @@ body {
     text-align: center;
 }
 
-input, select {
-    font-family: inherit;
-    font-weight: bold;
-    background-color: #faa14e;
-    border: black solid 2px;
-    border-radius: 5%;
-    padding: 0.2em;
-    margin: 0.15em 0.5em;
-}
-
 h1, h2 {
     font-size: 2em;
+    margin: 0.1em;
+}
+
+label {
+    margin-top: 10px;
+}
+
+.enrolForm {
+    max-width: 500px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.enrolForm input[type="text"] {
+    padding: 8px;
+    margin: 5px 0px;
+    border-radius: 5px;
+    border: 1px solid #faa14e;
+    font-family: inherit;
+    font-weight: bold;
+}
+
+.enrolForm input[type="submit"] {
+    margin-top: 15px;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: #faa14e;
+    color: black;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+}
+
+.enrolForm input[type="submit"]:hover {
+    background-color: #fa973b;
+}
+
+.message {
+    margin-top: 15px;
+    color: #107c10;
+    font-weight: 500;
 }

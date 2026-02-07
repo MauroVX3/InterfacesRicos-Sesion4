@@ -1,0 +1,19 @@
+.programs {
+    margin: 20px auto;
+    border-radius: 8px;
+}
+
+.ulEnrol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.radioSel {
+    margin-left: 15px;
+}
+
+.ulEnrol li:last-child {
+    margin-top: 10px;
+    font-weight: 500;
+}

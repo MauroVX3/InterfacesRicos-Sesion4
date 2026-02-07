@@ -9,6 +9,7 @@ function App() {
   const [ugEnrolments, setUGEnrolments] = useState(0);
   const [pgEnrolments, setPGEnrolments] = useState(0);
   const [student, setStudent] = useState<Student>();
+  const [editingStudent, setEditingStudent] = useState<Student>(); 
 
   const handleChangeEnrolments = (updateEnrolments: number) => {
     program == "UG" ? setUGEnrolments(updateEnrolments) : setPGEnrolments(updateEnrolments);
@@ -37,8 +38,8 @@ function App() {
         </ul>
       </div>
       <EnrolmentForm chosenProgram={program} currentEnrolments={selectedEnrolments()}
-        onChangeEnrolments={handleChangeEnrolments} onStudentChanged={setStudent} />
-      <EnrolList student={student} onStudentRemoved={handleStudentRemoved}/>
+        onChangeEnrolments={handleChangeEnrolments} onStudentChanged={setStudent} editingStudent={editingStudent} />
+      <EnrolList student={student} onStudentRemoved={handleStudentRemoved} onStudentEditing={setEditingStudent}/>
     </div>
   )
 }
