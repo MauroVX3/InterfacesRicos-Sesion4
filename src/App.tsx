@@ -18,7 +18,10 @@ function App() {
   };
   const selectedEnrolments = (): number => {
     return program == "UG" ? ugEnrolments : pgEnrolments;
-  }
+  };
+  const handleStudentRemoved = (student: Student): void => {
+    student.program === "UG" ? setUGEnrolments(ugEnrolments - 1) : setPGEnrolments(pgEnrolments - 1);
+  };
 
   return (
     <div className="App">
@@ -34,8 +37,8 @@ function App() {
         </ul>
       </div>
       <EnrolmentForm chosenProgram={program} currentEnrolments={selectedEnrolments()}
-      onChangeEnrolments={handleChangeEnrolments} onStudentChanged={setStudent} />
-      <EnrolList student={student}/>
+        onChangeEnrolments={handleChangeEnrolments} onStudentChanged={setStudent} />
+      <EnrolList student={student} onStudentRemoved={handleStudentRemoved}/>
     </div>
   )
 }
