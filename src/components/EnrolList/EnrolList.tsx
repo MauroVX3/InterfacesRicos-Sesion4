@@ -1,32 +1,19 @@
 import "./EnrolList.css";
 import { DetailsList, type IColumn } from "@fluentui/react/lib/DetailsList";
 import { initializeIcons } from '@fluentui/react/lib/Icons';
-import type { Student } from "../../entities/Student";
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import type { Student } from "../../models/Student";
 import { MdEdit, MdDelete } from "react-icons/md";
 
 initializeIcons(); // requerido por FluentUI
 
-// Items de ejemplo 
-const items: any[] = [];
-for (let i = 1; i < 5; i++) {
-    items.push({
-        key: i,
-        fname: "Nombre de #" + i,
-        lname: "Apellidos de #" + i,
-        program: "UG"
-    });
-}
-
 interface EnrolListProps {
-    student?: Student;
+    students: Student[];
     onStudentRemoved: (student: Student) => void;
-    onStudentEditing: (student: Student) => void; 
+    onStudentEditing: (student: Student) => void;
 }
 
 function EnrolList(props: EnrolListProps) {
-    const [items, setItems] = useState<Student[]>([]);
+    const items = props.students;
 
     const columns: IColumn[] = [{
         key: "fname", name: "Nombre", fieldName: "firstName",
@@ -52,34 +39,12 @@ function EnrolList(props: EnrolListProps) {
         ),
     }];
 
-    const handleDelete = (item: Student) => { 
-        setItems(items.filter(i => i.id !== item.id)); 
+    const handleDelete = (item: Student) => {
         props.onStudentRemoved(item);
     };
     const handleEdit = (item: Student) => {
         props.onStudentEditing(item); 
     };
-
-    useEffect(() => { 
-        if (props.student) {             
-            const currentID = props.student.id; 
-            if (currentID == undefined) { 
-                const student: Student = { ...props.student, id: uuidv4() }; 
-                setItems([...items, student]); 
-            } else { 
-                const studentIndex = items.findIndex(item => item.id === props.student!.id); 
-                if (studentIndex !== -1) { 
-                    const updatedItems = [...items]; 
-                    updatedItems[studentIndex] = { ...props.student }; // reemplazamos el estudiante 
-                    setItems(updatedItems); 
-                } else { 
-                    //TODO Ya lo gestionaremos mejor... 
-                    console.log("No encontramos el estudiante con ID " + studentIndex);  
-                } 
-            } 
-        }         
-    }, [props.student]);
-
 
     return (
         <div className="enrolList">
@@ -88,4 +53,4 @@ function EnrolList(props: EnrolListProps) {
         </div>
     );
 }
-export default EnrolList
+export default EnrolList;

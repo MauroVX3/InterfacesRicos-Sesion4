@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import './EnrolmentForm.css'
-import type { Student } from '../../entities/Student';
+import type { Student } from '../../models/Student';
 
 interface EnrolmentFormProps {
     chosenProgram: string;
     currentEnrolments: number;
-    onChangeEnrolments: (updateEnrolments: number) => void;
-    onStudentChanged: (student: Student) => void;
+    onSubmitStudent: (student: Student) => void;
     editingStudent?: Student;
+    onCancel?: () => void;
 }
 
 function EnrolmentForm(props: EnrolmentFormProps) {
@@ -31,21 +31,22 @@ function EnrolmentForm(props: EnrolmentFormProps) {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         const submitter = (event.nativeEvent as SubmitEvent).submitter as HTMLInputElement;
-        if (!submitter || submitter.value != "Cancelar") {
+        if (!submitter || submitter.value !== "Cancelar") {
             setWelcomeMessage(`Bienvenido/a ${firstName} ${lastName}`);
-            props.onChangeEnrolments(props.currentEnrolments + 1);
             const student: Student = {
                 id: editingStudentID,
                 firstName: firstName,
                 lastName: lastName,
                 program: props.chosenProgram
             };
-            props.onStudentChanged(student);
+            props.onSubmitStudent(student);
+        } else {
+            props.onCancel?.();
         }
         setEditingStudentID(undefined);
-        setFirstName(""); // añadido porque hemos añadido value en el input 
+        setFirstName("");
         setLastName("");
-        nameInputRef.current?.focus(); // situamos el cursor en el campo fname 
+        nameInputRef.current?.focus();
         event.preventDefault();
         setBtnTitle("Registrar");
     };
@@ -68,4 +69,4 @@ function EnrolmentForm(props: EnrolmentFormProps) {
     )
 }
 
-export default EnrolmentForm
+export default EnrolmentForm;
